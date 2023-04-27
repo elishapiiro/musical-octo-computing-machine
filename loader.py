@@ -11,6 +11,7 @@ class User:
     password: str
     ssn: str
     home_address: str
+    age: int
 
 # Connect to MongoDB using the connection string from the environment variable
 client = pymongo.MongoClient(os.environ['MONGODB_CONNECTION_STRING'])
@@ -18,15 +19,15 @@ db = client.mydatabase
 users_collection = db.users
 
 # Retrieve the encrypted users from the MongoDB collection
-encrypted_users = []
+raw_users = []
 for user in users_collection.find():
-    encrypted_users.append(user)
+    raw_users.append(user)
 
 # Load the encrypted users into User objects
 users = []
-for encrypted_user in encrypted_users:
+for raw_user in raw_users:
     user_dict = {}
-    for key, value in encrypted_user.items():
+    for key, value in raw_user.items():
         if key == '_id':
             # Convert the ObjectId to a string
             value = str(value)
